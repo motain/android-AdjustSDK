@@ -274,7 +274,6 @@ public class ActivityHandler extends HandlerThread {
         }
 
         this.appToken = appToken;
-        androidId = Util.getAndroidId(context);
         fbAttributionId = Util.getAttributionId(context);
         userAgent = Util.getUserAgent(context);
 
@@ -287,6 +286,7 @@ public class ActivityHandler extends HandlerThread {
             String macAddress = Util.getMacAddress(context);
             macSha1 = Util.getMacSha1(macAddress);
             macShortMd5 = Util.getMacShortMd5(macAddress);
+            androidId = Util.getAndroidId(context);
         }
 
         packageHandler = AdjustFactory.getPackageHandler(this, context, dropOfflineActivities);
