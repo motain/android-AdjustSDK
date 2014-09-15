@@ -1,16 +1,24 @@
 package com.adjust.sdk;
 
 import org.apache.http.client.HttpClient;
+import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.HttpParams;
 
 import android.content.Context;
+
+import java.security.KeyStore;
 
 public class AdjustFactory {
     private static IPackageHandler packageHandler = null;
     private static IRequestHandler requestHandler = null;
     private static Logger logger = null;
     private static HttpClient httpClient = null;
+    private static SchemeRegistry registry = null;
 
     private static long timerInterval = -1;
     private static long sessionInterval = -1;
@@ -40,11 +48,29 @@ public class AdjustFactory {
 
     public static HttpClient getHttpClient(HttpParams params) {
         if (httpClient == null) {
-            return new DefaultHttpClient(params);
+            try
+            {
+                if (registry == null) {
+                    KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+                    trustStore.load(null, null);
+
+                    SSLSocketFactory sf = new AdjustSSLSocketFactory(trustStore);
+                    sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+
+                    registry = new SchemeRegistry();
+                    registry.register(new Scheme("https", sf, 443));
+                }
+                ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
+
+                return new DefaultHttpClient(ccm, params);
+            }
+            catch (Exception e)
+            {
+                return new DefaultHttpClient(params);
+            }
         }
         return httpClient;
     }
-
     public static long getTimerInterval() {
         if (timerInterval == -1) {
             return Constants.ONE_MINUTE;
