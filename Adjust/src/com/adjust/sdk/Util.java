@@ -378,18 +378,4 @@ public class Util {
 
         return plugins;
     }
-
-    public static Bundle getApplicationBundle(Context context, Logger logger) {
-        final ApplicationInfo applicationInfo;
-        try {
-            String packageName = context.getPackageName();
-            applicationInfo = context.getPackageManager().getApplicationInfo(packageName, PackageManager.GET_META_DATA);
-            return applicationInfo.metaData;
-        } catch (NameNotFoundException e) {
-            logger.error("ApplicationInfo not found");
-        } catch (Exception e) {
-            logger.error("Failed to get ApplicationBundle (%s)", e);
-        }
-        return null;
-    }
 }
