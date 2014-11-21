@@ -1,4 +1,6 @@
 apply plugin: 'android-library'
+apply plugin: 'maven'
+
 buildscript {
   repositories {
     mavenCentral()
@@ -6,8 +8,15 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:+'
+    classpath 'com.android.tools.build:gradle:0.12.+'
   }
+}
+
+// set project wide properties and if not available apply defaults
+if (new File('onefootball.properties.gradle').exists()) {
+    apply from: 'onefootball.properties.gradle';
+} else {
+    throw new GradleException('### Mandatory properties file is missing! ###\nPlease check if "onefootball.properties.gradle" and "onefootball.signing.keystore" are in your project root folder. If not you could find them on the project wiki page.')
 }
 
 repositories {
@@ -45,4 +54,20 @@ task jar(type: Jar) {
 
 task wrapper(type: Wrapper) {
   gradleVersion = '1.8'
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: project.deploymentUrl) {
+                authentication(userName: project.deploymentUsername, password: project.deploymentPassword)
+            }
+
+            pom.project {
+            	groupId 'com.onefootball.android'
+            	artifactId 'adjust'
+            	version '3.6.1'
+        	}
+        }
+    }
 }

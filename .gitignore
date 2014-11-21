@@ -64,4 +64,8 @@ build/
 .jira-url
 atlassian-ide-plugin.xml
 
-# add exception for private libraries 
+# add exception for private libraries
+
+# sensitive files not to be committed at any point
+onefootball.signing.keystore
+onefootball.properties.gradle
