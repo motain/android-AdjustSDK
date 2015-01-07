@@ -23,7 +23,7 @@ public interface Constants {
     int THIRTY_MINUTES = 30 * ONE_MINUTE;
 
     String BASE_URL   = "https://app.adjust.io";
-    String CLIENT_SDK = "android3.6.1";
+    String CLIENT_SDK = "android3.6.2";
     String LOGTAG     = "Adjust";
 
     String SESSION_STATE_FILENAME    = "AdjustIoActivityState";
@@ -46,5 +46,5 @@ public interface Constants {
     String SHA1     = "SHA-1";
 
     // List of known plugins, possibly not active
-    List<String> PLUGINS = Arrays.asList("com.adjust.sdk.plugin.Vulcun");
+    List<String> PLUGINS = Arrays.asList();
 }
